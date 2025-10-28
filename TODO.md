@@ -10,7 +10,7 @@
 
 ## Phase 2: Math (Lab Benches) - 5 Modules
 
-- [ ] 6. `src/math/cluster_math.py` – Perps clusters (base).
+- [x] 6. `src/math/cluster_math.py` – Perps clusters (base).
 - [ ] 7. `src/math/wick_math.py` – Wicks (base).
 - [ ] 8. `src/math/risk_math.py` – Sizing (add hybrid_kelly: perps_prob * poly_edge).
 - [ ] 9. `src/math/sl_tp_math.py` – Optimization (base).

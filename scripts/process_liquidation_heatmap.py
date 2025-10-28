@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Sequence, Tuple
@@ -21,6 +22,18 @@ from fastmcp.client.transports import PythonStdioTransport
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SERVER_WRAPPER = REPO_ROOT / "scripts" / "run_imagesorcery_mcp.py"
+
+ASCII_REPLACEMENTS = {
+    "•": "-",
+    "–": "-",
+    "—": "-",
+    "·": ".",
+    "×": "x",
+    "’": "'",
+    "“": '"',
+    "”": '"',
+    "™": "TM",
+}
 
 
 @dataclass
@@ -73,6 +86,18 @@ def _parse_callouts(callouts: Sequence[str]) -> List[Tuple[str, float, float, fl
             raise ValueError(f"Invalid callout spec: {callout}")
         parsed.append((label.strip(), *parts))
     return parsed
+
+
+def _sanitize_text(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    sanitized_chars: List[str] = []
+    for ch in normalized:
+        if ch in ASCII_REPLACEMENTS:
+            sanitized_chars.append(ASCII_REPLACEMENTS[ch])
+        elif ord(ch) < 128:
+            sanitized_chars.append(ch)
+        # Skip characters we cannot render in Hershey fonts.
+    return "".join(sanitized_chars)
 
 
 def _parse_metrics(entries: Sequence[str]) -> List[Metric]:
@@ -256,7 +281,7 @@ async def annotate(
             metric_text_entries.extend(
                 [
                     {
-                        "text": metric.label.upper(),
+                        "text": _sanitize_text(metric.label.upper()),
                         "x": panel_x1 + 96,
                         "y": top + 26,
                         "font_scale": 0.68,
@@ -264,7 +289,7 @@ async def annotate(
                         "color": [185, 193, 205],
                     },
                     {
-                        "text": metric.value,
+                        "text": _sanitize_text(metric.value),
                         "x": panel_x1 + 96,
                         "y": top + 58,
                         "font_scale": 1.05,
@@ -348,7 +373,7 @@ async def annotate(
         # Compose text blocks
         texts: List[dict] = [
             {
-                "text": title,
+                "text": _sanitize_text(title),
                 "x": 96,
                 "y": min(140, config.top_height - 36),
                 "font_scale": 1.7,
@@ -356,7 +381,7 @@ async def annotate(
                 "color": [255, 255, 255],
             },
             {
-                "text": subtitle,
+                "text": _sanitize_text(subtitle),
                 "x": 96,
                 "y": min(config.top_height + 20, config.top_height + 60),
                 "font_scale": 0.95,
@@ -364,7 +389,7 @@ async def annotate(
                 "color": [220, 220, 220],
             },
             {
-                "text": f"PAIR  •  {pair}",
+                "text": _sanitize_text(f"PAIR  •  {pair}"),
                 "x": panel_x1 + 40,
                 "y": config.top_height - 30,
                 "font_scale": 0.85,
@@ -372,7 +397,7 @@ async def annotate(
                 "color": [235, 235, 235],
             },
             {
-                "text": f"TIMEFRAME  •  {timeframe}",
+                "text": _sanitize_text(f"TIMEFRAME  •  {timeframe}"),
                 "x": panel_x1 + 40,
                 "y": config.top_height + 20,
                 "font_scale": 0.85,
@@ -380,7 +405,7 @@ async def annotate(
                 "color": [235, 235, 235],
             },
             {
-                "text": footer,
+                "text": _sanitize_text(footer),
                 "x": 96,
                 "y": int(height) - int(config.bottom_height / 2),
                 "font_scale": 0.85,
@@ -388,7 +413,7 @@ async def annotate(
                 "color": [210, 210, 210],
             },
             {
-                "text": "VOLTRADAR ALPHA • INTERNAL MARKET SNAPSHOT",
+                "text": _sanitize_text("VOLTRADAR ALPHA • INTERNAL MARKET SNAPSHOT"),
                 "x": panel_x1 + 60,
                 "y": 40,
                 "font_scale": 0.75,
@@ -407,7 +432,7 @@ async def annotate(
         for insight in insights:
             texts.append(
                 {
-                    "text": f"• {insight}",
+                    "text": _sanitize_text(f"• {insight}"),
                     "x": panel_x1 + 60,
                     "y": insight_y,
                     "font_scale": 0.85,
@@ -420,7 +445,7 @@ async def annotate(
         for label, nx1, ny1, _, _ in callouts:
             texts.append(
                 {
-                    "text": label,
+                    "text": _sanitize_text(label),
                     "x": int(nx1 * width) + 130,
                     "y": max(int(ny1 * height) - 72, config.top_height + 80),
                     "font_scale": 0.8,
