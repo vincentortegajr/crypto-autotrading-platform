@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: vince-timescaledb
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${TIMESCALE_DB_PASS}
+      POSTGRES_DB: ${TIMESCALE_DB_NAME}
+      POSTGRES_USER: ${TIMESCALE_DB_USER}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/timescaledb_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TIMESCALE_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: vince-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./db/redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: vince-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASS}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db/grafana_storage:/var/lib/grafana
+    depends_on:
+      - timescaledb
+
+volumes:
+  grafana-storage:
