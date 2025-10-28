@@ -11,7 +11,7 @@
 ## Phase 2: Math (Lab Benches) - 5 Modules
 
 - [x] 6. `src/math/cluster_math.py` – Perps clusters (base).
-- [ ] 7. `src/math/wick_math.py` – Wicks (base).
+- [x] 7. `src/math/wick_math.py` – Wicks (base).
 - [ ] 8. `src/math/risk_math.py` – Sizing (add hybrid_kelly: perps_prob * poly_edge).
 - [ ] 9. `src/math/sl_tp_math.py` – Optimization (base).
 - [ ] 10. `src/math/poly_edge_math.py` – Bet formula (sympy: signal * (1-vol) * alloc * emot), checklist_score(>=5), poly_kelly. Hook risk_math. Test: `score_edge(0.8, 0.1) >0.5`.
