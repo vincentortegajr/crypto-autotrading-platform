@@ -5,8 +5,8 @@
 - [x] 1. `src/utils/config_utils.py` – .env loader + getters (add poly keys). Test: `python3 -c "from src.utils.config_utils import get_config; print(get_config().coinglass_api_key)"`.
 - [x] 2. `src/utils/timescale_utils.py` – Pooling/queries (add insert_poly_wallet, insert_poly_signal). Test: Insert dummy trade/poly signal.
 - [x] 3. `src/utils/redis_utils.py` – Pub/sub (add "poly_signals" channel). Test: Publish/subscribe echo.
-- [ ] 4. `src/utils/data_utils.py` – I/O (add poly JSON/CSV for CLOB). Test: Save/load wallet DF.
-- [ ] 5. `src/utils/error_utils.py` – Decorators/retry (universal). Test: `@retry_on_failure def flaky(): raise`.
+- [x] 4. `src/utils/data_utils.py` – I/O (add poly JSON/CSV for CLOB). Test: Save/load wallet DF.
+- [x] 5. `src/utils/error_utils.py` – Decorators/retry (universal). Test: `@retry_on_failure def flaky(): raise`.
 
 ## Phase 2: Math (Lab Benches) - 5 Modules
 
