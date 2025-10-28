@@ -19,6 +19,7 @@
 Since 2016, I've watched whales hunt liquidation clusters like clockwork in perps markets: Long positions pump to wipe shorts, take profits, flip short to dump and liquidate longs – printing on both spot and perpetuals simultaneously. This pattern is 100% visible in on-chain data, but retail misses it. Now, layer in prediction markets: Smart wallets (addresses with 30%+ ROI, pre-news entries) front-run events like elections or macro shifts, creating correlated asymmetries (e.g., Trump odds spike → BTC OI dump). Polymarket's $30M+ 2025 volumes are the untapped oracle – binary truths from crowd wisdom, outperforming polls by 15-20%.
 
 **We are building the system that:**
+
 1. **Tracks liquidation heatmaps** across ALL timeframes (12h to 1 year) for every perpetual coin, fused with prediction wallet clusters for hybrid signals.
 2. **Predicts whale targets** by analyzing historical patterns, OI/volume spikes, wick behavior, and smart-wallet syncs (e.g., ≥2 wallets betting pre-news).
 3. **Executes trades via AI AutoTraders** that follow whale movements in real-time across perps (Bybit) and predictions (Polymarket CLOB), arbing correlations like event odds to crypto vol.
@@ -38,6 +39,7 @@ Since 2016, I've watched whales hunt liquidation clusters like clockwork in perp
 **Now: AI Agent Construction (PART 2). Follow this checklist sequentially. Each phase builds on the last. Fusion: Poly hooks perps for hybrids.**
 
 ### PHASE 1: UTILITIES (BASEMENT PIPES) - 5 Modules
+
 - [ ] 1. `src/utils/config_utils.py` – .env loader + getters (add poly keys). Test: `python3 -c "from src.utils.config_utils import get_config; print(get_config().coinglass_api_key)"`.
 - [ ] 2. `src/utils/timescale_utils.py` – Pooling/queries (add insert_poly_wallet, insert_poly_signal). Test: Insert dummy trade/poly signal.
 - [ ] 3. `src/utils/redis_utils.py` – Pub/sub (add "poly_signals" channel). Test: Publish/subscribe echo.
@@ -45,18 +47,21 @@ Since 2016, I've watched whales hunt liquidation clusters like clockwork in perp
 - [ ] 5. `src/utils/error_utils.py` – Decorators/retry (universal). Test: `@retry_on_failure def flaky(): raise`.
 
 ### PHASE 2: MATH (LAB BENCHES) - 5 Modules
+
 - [ ] 6. `src/math/cluster_math.py` – Perps clusters (base).
 - [ ] 7. `src/math/wick_math.py` – Wicks (base).
 - [ ] 8. `src/math/risk_math.py` – Sizing (add hybrid_kelly: perps_prob * poly_edge).
 - [ ] 9. `src/math/sl_tp_math.py` – Optimization (base).
-- [ ] 10. `src/math/poly_edge_math.py` – Bet formula (sympy: signal * (1-vol) * alloc * emot), checklist_score (>=5), poly_kelly. Hook risk_math. Test: `score_edge(0.8, 0.1) >0.5`.
+- [ ] 10. `src/math/poly_edge_math.py` – Bet formula (sympy: signal *(1-vol)* alloc * emot), checklist_score (>=5), poly_kelly. Hook risk_math. Test: `score_edge(0.8, 0.1) >0.5`.
 
 ### PHASE 3: SOCKETS (TOWER ANTENNAS) - 3 Modules
+
 - [ ] 11. `src/sockets/coinglass_ws.py` – Base.
 - [ ] 12. `src/sockets/bybit_ws.py` – Base.
 - [ ] 13. `src/sockets/polymarket_ws.py` – Nevua/PolyTale WS (on_message pub "poly_bet_alert"). Test: Mock sub.
 
 ### PHASE 4: SCANNERS (INTEL OUTPOSTS) - 6 Modules
+
 - [ ] 14. `src/sockets/ws_manager.py` – Manager (add poly restart). Test: `docker logs`.
 - [ ] 15. `src/scanners/heatmap/model1_scan.py` – Base.
 - [ ] 16. `src/scanners/coin_history/aggregated.py` – Base.
@@ -66,6 +71,7 @@ Since 2016, I've watched whales hunt liquidation clusters like clockwork in perp
 - [ ] 20. `src/scanners/polymarket/signal_oracle.py` – Score via poly_edge_math, checklist>=5 → pub "poly_signals" (hybrid if oi>0.7). 10s loop.
 
 ### PHASE 5: AGENTS (WORK CREWS) - 5 Modules
+
 - [ ] 21. `src/agents/trade/trade_executor.py` – Base (add poly_clob_exec).
 - [ ] 22. `src/agents/logging/agent_log.py` – Base (tag vertical).
 - [ ] 23. `src/agents/broadcast/telegram.py` – Base (add poly templates: "🚀 Insider Copy: +33% [market]!").
@@ -73,6 +79,7 @@ Since 2016, I've watched whales hunt liquidation clusters like clockwork in perp
 - [ ] 25. `src/agents/autotraders/polymarket_copy/main.py` – Sub "poly_signals", ecdsa-sign CLOB, gradual exits (0.1 steps), guardian (10% cap).
 
 ### PHASE 6: DASHBOARDS (OBSERVATION DECKS) - 2 Modules
+
 - [ ] 26. `src/web/grafana/grafana_panel.py` – Base (add "Hybrid ROI: perps + poly").
 - [ ] 27. `src/web/streamlit/dashboard.py` – Base (add poly tab: wallet graphs).
 
@@ -85,6 +92,7 @@ Since 2016, I've watched whales hunt liquidation clusters like clockwork in perp
 Think of this project as **Planet Earth** – a living, breathing metropolis where you open Google Maps on your phone, see the blue marble spinning in space, then zoom in continent by continent, street by street, until every building hums with purpose. Perps is the bustling core (liquidation rivers feeding trade engines); Polymarket Oracle is the satellite network (event constellations arbing the skies). Start at orbital view (.env grid powering the globe), zoom to libraries (db/ for time-series ledgers), warehouses (data/ for raw intel to signals), workforce (src/agents/ executing in sync), intel hubs (src/scanners/ spotting edges), labs (src/math/ crunching Kelly formulas), telecom towers (src/sockets/ streaming WS feeds), utilities (src/utils/ piping clean power), tourist vistas (src/web/ dashboards overlooking the empire), maintenance crews (scripts/ keeping lights on), and QA sentinels (tests/ guarding the gates).
 
 Updated for Helix Fusion:
+
 - **⚡ `.env`** = The electrical grid (powers everything, now with Poly API keys).
 - **🏛️ `db/`** = Central library (TimescaleDB for history/hypertables, Redis for real-time – extended for poly_wallets/signals).
 - **🏭 `data/`** = Warehouse district (raw materials → factory processing → finished goods; add poly subfolders for wallet CSVs, CLOB snapshots).
@@ -113,18 +121,18 @@ Zoom Tip: On your M4 Max, open Maps app, search "San Francisco" (perps core), th
 | **Docker Desktop** | Latest (Mac M4) | Container orchestration (TimescaleDB, Redis, Grafana). |
 | **Grafana** | Latest (10.x+) | Live dashboards and SQL query UI (add poly vs. perps panels). |
 | **VS Code** | Latest | IDE with extensions (Python, Docker, GitHub Copilot). |
-| **CoinGlass API** | Premium | Aggregated liquidation heatmaps, OI, volume (perps core). Docs: https://www.coinglass.com/docs. |
-| **Bybit API** | v5 | Trading execution (perps). Docs: https://bybit-exchange.github.io/docs/v5/intro. |
-| **Telegram Bot API** | Latest | Broadcast to channels (hybrid signals). Docs: https://core.telegram.org/bots/api. |
-| **X (Twitter) API** | Latest | Social media broadcasting (poly insider recaps). Docs: https://developer.twitter.com/en/docs/twitter-api. |
-| **Twilio SMS API** | Latest | SMS alerts (high-conviction hybrids). Docs: https://www.twilio.com/docs/sms/api. |
-| **Polymarket CLOB API** | Latest | Order book for poly executions. Docs: https://docs.polymarket.com/developers/CLOB/introduction. |
-| **Polymarket Gamma API** | Latest | Read-only markets/discovery (poly signals). Docs: https://docs.polymarket.com/developers/gamma-markets-api/overview. |
-| **Polysights API** | Latest | AI wallet analytics (insider finder). Docs: https://app.polysights.xyz/documentation (sign up at https://app.polysights.xyz). |
-| **Nevua Markets WS** | Latest | Real-time poly alerts. Docs: https://nevua.markets/ (GitHub: https://github.com/nevuamarkets/poly-websockets). |
-| **HashDive API** | Latest | Smart scores/insider detection. Docs: https://www.hashdive.com/ (contact: contact@hashdive.com). |
-| **PolyTale API** | Latest | AI research agent (whale tracking). Docs: https://polymark.et/product/polytale (Twitter: @polytaleai). |
-| **Polygon RPC** | Latest | On-chain wallet queries. Docs: https://polygon.technology/rpc (free Infura: https://infura.io). |
+| **CoinGlass API** | Premium | Aggregated liquidation heatmaps, OI, volume (perps core). Docs: <https://www.coinglass.com/docs>. |
+| **Bybit API** | v5 | Trading execution (perps). Docs: <https://bybit-exchange.github.io/docs/v5/intro>. |
+| **Telegram Bot API** | Latest | Broadcast to channels (hybrid signals). Docs: <https://core.telegram.org/bots/api>. |
+| **X (Twitter) API** | Latest | Social media broadcasting (poly insider recaps). Docs: <https://developer.twitter.com/en/docs/twitter-api>. |
+| **Twilio SMS API** | Latest | SMS alerts (high-conviction hybrids). Docs: <https://www.twilio.com/docs/sms/api>. |
+| **Polymarket CLOB API** | Latest | Order book for poly executions. Docs: <https://docs.polymarket.com/developers/CLOB/introduction>. |
+| **Polymarket Gamma API** | Latest | Read-only markets/discovery (poly signals). Docs: <https://docs.polymarket.com/developers/gamma-markets-api/overview>. |
+| **Polysights API** | Latest | AI wallet analytics (insider finder). Docs: <https://app.polysights.xyz/documentation> (sign up at <https://app.polysights.xyz>). |
+| **Nevua Markets WS** | Latest | Real-time poly alerts. Docs: <https://nevua.markets/> (GitHub: <https://github.com/nevuamarkets/poly-websockets>). |
+| **HashDive API** | Latest | Smart scores/insider detection. Docs: <https://www.hashdive.com/> (contact: <contact@hashdive.com>). |
+| **PolyTale API** | Latest | AI research agent (whale tracking). Docs: <https://polymark.et/product/polytale> (Twitter: @polytaleai). |
+| **Polygon RPC** | Latest | On-chain wallet queries. Docs: <https://polygon.technology/rpc> (free Infura: <https://infura.io>). |
 | **GitHub Copilot/Claude/ChatGPT** | Latest | AI agents for code gen (terminal integration via VS Code extensions). |
 
 API Keys/Tokens: All fetched via sign-ups (links above); store in .env only. No hardcodes.
@@ -140,7 +148,7 @@ You are the **planet architect**, sitting at a blank-slate MacBook Pro M4 Max (1
 Open Safari (pre-installed). Zoom: Earth view → search "VS Code" → download.
 
 1. **Install VS Code** (IDE for all coding/AI agents):
-   - Go: https://code.visualstudio.com/.
+   - Go: <https://code.visualstudio.com/>.
    - Click "Download for Mac" (Apple Silicon).
    - Open .dmg, drag to Applications.
    - Launch VS Code from Spotlight (Cmd+Space, type "VS Code").
@@ -148,26 +156,26 @@ Open Safari (pre-installed). Zoom: Earth view → search "VS Code" → download.
    - Terminal (in VS Code: Terminal > New Terminal): `code --version` (expect 1.90+).
 
 2. **Install Docker Desktop** (for containers – TimescaleDB/Redis/Grafana):
-   - Go: https://www.docker.com/products/docker-desktop/.
+   - Go: <https://www.docker.com/products/docker-desktop/>.
    - Download Mac (Apple Silicon).
    - Open .dmg, drag to Applications.
    - Launch Docker (it auto-starts; grant permissions).
    - Terminal: `docker --version` (expect 27.x+). If Apple Silicon warning, run `softwareupdate --install --required`.
 
 3. **Sign Up for APIs/Keys** (Collect tokens; bookmark docs):
-   - **CoinGlass Premium**: https://www.coinglass.com/account/register → Dashboard > API Key. Copy key. Docs bookmark: https://www.coinglass.com/docs.
-   - **Bybit**: https://www.bybit.com/en/user/assets/apiManagement → Create API (read/trade perms). Copy key/secret. Docs: https://bybit-exchange.github.io/docs/v5/intro.
-   - **Binance (Optional)**: https://www.binance.com/en/my/settings/api-management → Create API. Docs: https://binance-docs.github.io/apidocs/futures/en/.
-   - **Telegram Bot**: https://t.me/BotFather → /newbot → Copy token. Create channel @yourquantalerts, add bot as admin. Docs: https://core.telegram.org/bots/api.
-   - **X API**: https://developer.twitter.com/en/portal/dashboard → Free tier app → Keys & Tokens (read+write). Docs: https://developer.twitter.com/en/docs/twitter-api.
-   - **Twilio**: https://www.twilio.com/try-twilio → Sign up, verify phone → Console > SMS > Keys. Docs: https://www.twilio.com/docs/sms/api.
-   - **Email (Gmail App Password)**: https://myaccount.google.com/apppasswords → Generate for "Mail". Docs: https://support.google.com/mail/answer/185833.
-   - **Polymarket**: https://polymarket.com → Wallet connect (Polygon), then https://docs.polymarket.com/developers/CLOB/introduction → Generate CLOB key (proxy wallet setup). Docs: https://docs.polymarket.com/.
-   - **Polysights**: https://app.polysights.xyz → Sign up (free tier) → API section. Docs: https://app.polysights.xyz/documentation.
-   - **Nevua**: https://nevua.markets/ → Sign up → WS token. GitHub: https://github.com/nevuamarkets/poly-websockets.
-   - **HashDive**: https://www.hashdive.com/ → Contact form for API access. Docs: https://www.hashdive.com/.
-   - **PolyTale**: https://polymark.et/product/polytale → Twitter @polytaleai for access. Docs: https://polymark.et/product/polytale.
-   - **Infura (Polygon RPC)**: https://infura.io → Sign up → Polygon Mainnet endpoint (free). Docs: https://polygon.technology/rpc.
+   - **CoinGlass Premium**: <https://www.coinglass.com/account/register> → Dashboard > API Key. Copy key. Docs bookmark: <https://www.coinglass.com/docs>.
+   - **Bybit**: <https://www.bybit.com/en/user/assets/apiManagement> → Create API (read/trade perms). Copy key/secret. Docs: <https://bybit-exchange.github.io/docs/v5/intro>.
+   - **Binance (Optional)**: <https://www.binance.com/en/my/settings/api-management> → Create API. Docs: <https://binance-docs.github.io/apidocs/futures/en/>.
+   - **Telegram Bot**: <https://t.me/BotFather> → /newbot → Copy token. Create channel @yourquantalerts, add bot as admin. Docs: <https://core.telegram.org/bots/api>.
+   - **X API**: <https://developer.twitter.com/en/portal/dashboard> → Free tier app → Keys & Tokens (read+write). Docs: <https://developer.twitter.com/en/docs/twitter-api>.
+   - **Twilio**: <https://www.twilio.com/try-twilio> → Sign up, verify phone → Console > SMS > Keys. Docs: <https://www.twilio.com/docs/sms/api>.
+   - **Email (Gmail App Password)**: <https://myaccount.google.com/apppasswords> → Generate for "Mail". Docs: <https://support.google.com/mail/answer/185833>.
+   - **Polymarket**: <https://polymarket.com> → Wallet connect (Polygon), then <https://docs.polymarket.com/developers/CLOB/introduction> → Generate CLOB key (proxy wallet setup). Docs: <https://docs.polymarket.com/>.
+   - **Polysights**: <https://app.polysights.xyz> → Sign up (free tier) → API section. Docs: <https://app.polysights.xyz/documentation>.
+   - **Nevua**: <https://nevua.markets/> → Sign up → WS token. GitHub: <https://github.com/nevuamarkets/poly-websockets>.
+   - **HashDive**: <https://www.hashdive.com/> → Contact form for API access. Docs: <https://www.hashdive.com/>.
+   - **PolyTale**: <https://polymark.et/product/polytale> → Twitter @polytaleai for access. Docs: <https://polymark.et/product/polytale>.
+   - **Infura (Polygon RPC)**: <https://infura.io> → Sign up → Polygon Mainnet endpoint (free). Docs: <https://polygon.technology/rpc>.
    - Save all in Notes app; we'll paste to .env soon.
 
 4. **Install Git** (for version control/GitHub):
@@ -185,8 +193,9 @@ Zoom: Earth → North America → project site.
 2. `mkdir vince-quant-helix` (root folder; "helix" for poly fusion).
 3. `cd vince-quant-helix`.
 4. `code .` (opens VS Code workspace).
-5. Create .gitignore: New file > Paste (from GitHub: https://github.com/github/gitignore/blob/main/Python.gitignore + add `.env`).
+5. Create .gitignore: New file > Paste (from GitHub: <https://github.com/github/gitignore/blob/main/Python.gitignore> + add `.env`).
 6. Run folder build (copy-paste; extends original with poly):
+
    ```
    mkdir -p config/{broadcast_templates,quant_math,scanners,docs/{browser_guides,ai_agent_guides},polymarket_endpoints}
    mkdir -p db/{timescale_schema,migrations,backup/{pg_full_dumps,redis_dumps,image_snapshots,logs},polymarket_extension}
@@ -221,6 +230,7 @@ Zoom: Earth → North America → project site.
 Zoom: Continent → city power lines.
 
 1. New file: `.env` (root). Paste extended template (original + poly):
+
    ```
    # ... [Original perps section unchanged] ...
 
@@ -241,10 +251,11 @@ Zoom: Continent → city power lines.
 
    # ... [Original project settings] ...
    ```
+
    - Fill from Notes (Step 1). Save. Add to .gitignore: `echo ".env" >> .gitignore`.
 
 2. Git init: `git init; git add .; git commit -m "Helix v2.0 foundation"`.
-3. GitHub repo: https://github.com/new → "vince-quant-helix" → Push: `git remote add origin https://github.com/YOURUSER/vince-quant-helix.git; git push -u origin main`.
+3. GitHub repo: <https://github.com/new> → "vince-quant-helix" → Push: `git remote add origin https://github.com/YOURUSER/vince-quant-helix.git; git push -u origin main`.
 
 **Zoom Analogy:** Wired the grid – power flows from perps stations to poly relays.
 
@@ -253,6 +264,7 @@ Zoom: Continent → city power lines.
 Zoom: City → industrial zone.
 
 1. New file: `docker-compose.yaml` (root). Paste extended (original + volumes fix):
+
    ```
    version: "3.9"
    services:
@@ -305,6 +317,7 @@ Zoom: City → industrial zone.
    volumes:
      grafana-storage:
    ```
+
    Save.
 
 2. Start: `docker-compose up -d`. Wait 30s: `docker ps` (3 running).
@@ -318,6 +331,7 @@ Zoom: City → industrial zone.
 Zoom: Warehouse → loading docks.
 
 1. New file: `requirements.txt` (root). Paste extended (original + poly):
+
    ```
    # ... [Original] ...
    networkx==3.3  # Wallet graphs
@@ -325,6 +339,7 @@ Zoom: Warehouse → loading docks.
    sympy==1.13.2  # Formulas/Kelly
    ecdsa==0.19.0  # Poly signatures
    ```
+
 2. Install: `pip3 install -r requirements.txt` (use pyenv if needed: `brew install pyenv; pyenv install 3.11.14; pyenv local 3.11.14`).
 3. Test Foundation: Create `test_foundation.py` (original paste + poly conn test). Run: `python3 test_foundation.py` (expect all ✅).
 
@@ -537,6 +552,7 @@ Street one: Ready for config_utils.py?
 ## 🏆 FINAL SUMMARY
 
 **This document contains:**
+
 1. ✅ Expanded vision/mission (perps yin-yang poly for trillion scale).
 2. ✅ Full tech stack (verified; poly APIs/docs/GitHubs).
 3. ✅ Ultra-granular human setup (orbit-to-street: downloads, sign-ups, commands).
