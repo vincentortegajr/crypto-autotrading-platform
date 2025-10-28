@@ -14,7 +14,7 @@
 - [x] 7. `src/math/wick_math.py` – Wicks (base).
 - [x] 8. `src/math/risk_math.py` – Sizing (add hybrid_kelly: perps_prob * poly_edge).
 - [x] 9. `src/math/sl_tp_math.py` – Optimization (base).
-- [ ] 10. `src/math/poly_edge_math.py` – Bet formula (sympy: signal * (1-vol) * alloc * emot), checklist_score(>=5), poly_kelly. Hook risk_math. Test: `score_edge(0.8, 0.1) >0.5`.
+- [x] 10. `src/math/poly_edge_math.py` – Bet formula (sympy: signal * (1-vol) * alloc * emot), checklist_score(>=5), poly_kelly. Hook risk_math. Test: `python3 -m src.math.poly_edge_math`.
 
 ## Phase 3: Sockets (Tower Antennas) - 3 Modules
 
