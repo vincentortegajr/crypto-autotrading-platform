@@ -1,0 +1,8 @@
+# Ignore all images
+*.png
+*.jpg
+*.jpeg
+
+# Keep the folder structure
+!README.md
+!.gitignore

@@ -1,0 +1,83 @@
+{
+  "symbol": "BTC",
+  "exchange": "Binance",
+  "pair": "BTC/USDT",
+  "timeframe": "24h",
+  "analysis_timestamp": "2025-10-28T00:37:00Z",
+  "analyst": "@VincentOrtegaJr",
+  "data_source": "CoinGlass.com",
+
+  "whale_targets": {
+    "primary": {
+      "price": "$111.5K",
+      "zone_type": "MASSIVE LIQUIDATION ZONE",
+      "liquidation_intensity": "EXTREME",
+      "color_indicator": "yellow-green (highest concentration)",
+      "coordinates": {
+        "x1": 200,
+        "y1": 730,
+        "x2": 1700,
+        "y2": 850
+      }
+    },
+    "secondary": {
+      "price_range": "$115K - $120K",
+      "zone_type": "SECONDARY TARGET",
+      "liquidation_intensity": "HIGH",
+      "color_indicator": "cyan-green",
+      "coordinates": {
+        "x1": 200,
+        "y1": 280,
+        "x2": 1700,
+        "y2": 400
+      }
+    }
+  },
+
+  "ocr_extracted_data": {
+    "whale_target_price": "$111.5K",
+    "secondary_target_range": "~$115-120K",
+    "massive_liquidation_zone_confirmed": true,
+    "legend_visible": true,
+    "timestamp_visible": "27,20:00 - 28,00:20"
+  },
+
+  "trading_implications": {
+    "direction": "BEARISH TRAP SETUP",
+    "whale_strategy": "Price will likely wick down to $111.5K to trigger massive liquidations before reversal",
+    "risk_zones": [
+      {
+        "price": "$111.5K",
+        "action": "AVOID LONG POSITIONS - WHALE LIQUIDATION HUNT",
+        "leverage_warning": "205.14M in liquidations concentrated here"
+      },
+      {
+        "price": "$115K-$120K",
+        "action": "SECONDARY LIQUIDATION SWEEP ZONE",
+        "leverage_warning": "Moderate concentration"
+      }
+    ],
+    "recommended_action": "Wait for whale targets to be hit, then enter LONG on confirmation"
+  },
+
+  "visualization": {
+    "raw_screenshot": "screenshots/raw/BTC_24h_raw.png",
+    "cropped_chart": "screenshots/cropped/BTC_24h_cropped.png",
+    "annotated_step1": "screenshots/annotated/BTC_24h_annotated_step1.png",
+    "annotated_step2": "screenshots/annotated/BTC_24h_annotated_step2.png",
+    "final_social": "screenshots/BTC_HEATMAP_24H_SOCIAL_FINAL.png"
+  },
+
+  "metadata": {
+    "image_dimensions": "1920x1280",
+    "annotation_tools": "ImageSorcery MCP",
+    "browser_automation": "Chrome DevTools MCP",
+    "ocr_engine": "EasyOCR",
+    "confidence_scores": {
+      "whale_target_text": 0.918,
+      "secondary_target_text": 0.615,
+      "massive_liquidation_zone": 0.999,
+      "coinglass_watermark": 0.999
+    }
+  }
+}

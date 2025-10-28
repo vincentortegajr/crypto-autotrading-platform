@@ -1,0 +1,20 @@
+# PRD Integration TODO Checklist
+- [x] Step 0: Skim CHATGPT-FINAL-PRD-1-WITH-EVERYTHING.MD (baseline structure).
+- [x] Step 1: Review z-THE-FULL-DOC-TREE-FOR-THE-PRD-NO-POLYMARKET-YET.MD and capture unique architecture details.
+- [x] Step 2: Diff findings into note log and flag deltas vs. final PRD.
+- [x] Step 3: Read z-PRD-VISION-AND-BUILD-DOC-NO-POLYMARKET-YET.md for vision + setup instructions.
+- [x] Step 4: Read z-PRD-UNDERSTANDING-VINCENT-GOOGLE-MAPS-ANALOGY.MD for multi-zoom mental model.
+- [x] Step 5: Read z-PRD-WITH POLYMARKET ADDED TO IT by GROK.md for Helix fusion updates.
+- [x] Step 6: Merge all deltas into CHATGPT-FINAL-PRD-1-WITH-EVERYTHING.MD (architecture, data flow, .env, SQL, test script).
+- [x] Step 7: Final QA pass — re-read unified PRD to confirm every requirement from source docs is represented without conflicts.
+- [x] Step 8: Review zzz-AGENT-MEMORY PROTOCOL REMINDER.md.
+- [x] Step 9: Review zp-WOULD I HAVE THOUGHT OF THIS? (AND WHO ACTUALLY KNOWS IT EXISTS.md).
+- [x] Step 10: Review zp-WHY THIS IS THE PERFECT STORM FOR A BILLION-DOLLAR EMPIRE.md.
+- [x] Step 11: Review zp-WHY LIQUIDATION HUNTING IS THE ONLY EDGE THAT MATTERS.md.
+- [x] Step 12: Review zp-IF-THIS-THEN-THAT EXECUTION FLOWCHART (NUMBERED LIST).md.
+- [x] Step 13: Review zp-GAMIFIED VISION WITH TRADING PLATFORM THE COMPLETE ROADMAP: FROM ZERO TO BILLION-DOLLAR EMPIRE.md.
+- [x] Step 14: Review zp-THE SCALED ENTRY STRATEGY: THE CHEAT CODE FOR INFINITE CAPITAL GROWTH.md.
+- [x] Step 15: Review zp-THE COMPLETE MASTER BLUEPRINT: NO CODE, JUST VISION, MISSION, DATA SOURCES & ASANA-STYLE CHECKLIST.md.
+- [x] Step 16: Review zp-LIVE PROOF: THE LIQUIDATION HUNTING STRATEGY IN REAL-TIME.md.
+- [x] Step 17: Consolidate insights from new docs into PRD_notes.md and update final PRD accordingly.
+- [x] Step 18: Final verification pass after new integrations.
