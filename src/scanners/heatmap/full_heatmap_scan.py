@@ -18,7 +18,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from src.scanners.heatmap.coinglass_rest import CoinGlassRestClient
+from src.scanners.heatmap.coinglass_rest import CoinGlassRestClient, CoinGlassAPIError
 from src.scanners.heatmap.get_bybit_perps import get_bybit_perps
 from src.utils.config_utils import get_config
 from src.utils.redis_utils import get_redis_utils
@@ -31,6 +31,8 @@ SCAN_INTERVAL = 300  # 5 minutes between full cycles
 TIMEFRAMES = ["12h", "24h", "3d", "7d", "30d", "90d", "180d", "1y"]  # ALL 8 timeframes
 MODELS = [1, 2, 3]  # ALL 3 models
 REQUESTS_PER_SECOND = 2  # Rate limiting: 2 requests/sec = 120/min = safe buffer under Professional plan limits
+INTERNAL_ERROR_THRESHOLD = 15  # after this many in a row, pause
+INTERNAL_ERROR_COOLDOWN = 60  # seconds to wait when CoinGlass keeps failing
 
 
 class FullHeatmapScanner:
@@ -43,6 +45,7 @@ class FullHeatmapScanner:
         self.redis_utils = None
         self.running = False
         self.coin_list: List[str] = []
+        self.internal_error_streak = 0
 
     async def initialize(self) -> None:
         """Initialize all connections and fetch coin list."""
@@ -78,6 +81,9 @@ class FullHeatmapScanner:
                 logger.debug(f"⚠️ {AGENT_NAME}: Empty data for {symbol} {timeframe} model{model}")
                 return None
 
+            # reset internal error streak on success
+            self.internal_error_streak = 0
+
             return {
                 "symbol": symbol,
                 "timeframe": timeframe,
@@ -88,6 +94,24 @@ class FullHeatmapScanner:
                 "timestamp": datetime.now(timezone.utc)
             }
 
+        except CoinGlassAPIError as exc:
+            message = str(exc).lower()
+            if "internal error" in message:
+                self.internal_error_streak += 1
+                if self.internal_error_streak >= INTERNAL_ERROR_THRESHOLD:
+                    logger.warning(
+                        f"⚠️ {AGENT_NAME}: CoinGlass internal errors hit {self.internal_error_streak}. "
+                        f"Cooling down for {INTERNAL_ERROR_COOLDOWN}s."
+                    )
+                    await asyncio.sleep(INTERNAL_ERROR_COOLDOWN)
+                    self.internal_error_streak = 0
+                else:
+                    await asyncio.sleep(1)  # brief pause to avoid hammering
+            else:
+                logger.error(
+                    f"❌ {AGENT_NAME}: API failure {symbol} {timeframe} model{model}: {exc}"
+                )
+            return None
         except Exception as exc:
             logger.error(f"❌ {AGENT_NAME}: Failed {symbol} {timeframe} model{model}: {exc}")
             return None

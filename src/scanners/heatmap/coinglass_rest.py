@@ -21,6 +21,14 @@ logger = logging.getLogger(__name__)
 AGENT_NAME = "coinglass_rest"
 BASE_URL = "https://open-api-v4.coinglass.com/api/futures"
 
+
+class CoinGlassAPIError(RuntimeError):
+    """Raised when CoinGlass returns a non-success response."""
+
+    def __init__(self, message: str, code: Optional[str] = None):
+        super().__init__(message)
+        self.code = code
+
 # Available endpoints
 ENDPOINTS = {
     "heatmap_model1": "/liquidation/aggregated-heatmap/model1",
@@ -87,14 +95,14 @@ class CoinGlassRestClient:
                 if data.get("code") != "0":
                     error_msg = data.get("msg", "Unknown error")
                     logger.error(f"❌ {AGENT_NAME}: API error: {error_msg}")
-                    raise ValueError(f"CoinGlass API error: {error_msg}")
+                    raise CoinGlassAPIError(error_msg, data.get("code"))
 
                 logger.debug(f"✅ {AGENT_NAME}: {endpoint} request successful")
                 return data
 
         except aiohttp.ClientError as e:
             logger.error(f"❌ {AGENT_NAME}: Request failed: {e}")
-            raise
+            raise CoinGlassAPIError(str(e))
 
     async def get_liquidation_heatmap(
         self,
