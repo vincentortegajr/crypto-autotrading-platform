@@ -1,0 +1,9 @@
+
+# Database files
+db/timescaledb_data/
+db/redis_data/
+db/grafana_storage/
+
+# Large JSON test files
+full_model_timeframe_*.json
+model_comparison_*.json
