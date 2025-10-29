@@ -7,3 +7,11 @@ db/grafana_storage/
 # Large JSON test files
 full_model_timeframe_*.json
 model_comparison_*.json
+
+# macOS cruft
+.DS_Store
+src/.DS_Store
+config/.DS_Store
+
+logs/
+
